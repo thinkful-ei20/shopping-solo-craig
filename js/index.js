@@ -1,12 +1,14 @@
 'use strict';
 
-const STORE = [
-  {name: 'apples', checked: false},
-  {name: 'oranges', checked: false},
-  {name: 'milk', checked: true},
-  {name: 'bread', checked: false}
-];
-
+const STORE = {
+  items: [
+    {name: 'apples', checked: false},
+    {name: 'oranges', checked: false},
+    {name: 'milk', checked: true},
+    {name: 'bread', checked: false},
+  ],
+  sortBy: 'alpha'
+};
 
 function generateItemElement(item, itemIndex) {
   return `
@@ -29,12 +31,12 @@ function generateShoppingItemsString(shoppingList) {
 }
 
 function renderShoppingList() {
-  const shoppingListItemsString = generateShoppingItemsString(STORE);
+  const shoppingListItemsString = generateShoppingItemsString(STORE.items);
   $('.js-shopping-list').html(shoppingListItemsString);
 }
 
 function addItemToShoppingList(itemName) {
-  STORE.push({name: itemName, checked: false});
+  STORE.items.push({name: itemName, checked: false});
 }
 
 function handleNewItemSubmit() {
@@ -48,7 +50,7 @@ function handleNewItemSubmit() {
 }
 
 function toggleCheckedForListItem(itemIndex) {
-  STORE[itemIndex].checked = !STORE[itemIndex].checked;
+  STORE.items[itemIndex].checked = !STORE.items[itemIndex].checked;
 }
 
 function getItemIndexFromElement(item) {
@@ -68,7 +70,7 @@ function handleItemCheckClicked() {
 
 function handleDeleteItemClicked() {  
   $('.js-shopping-list').on('click', '.js-item-delete', event => {
-    STORE.splice(getItemIndexFromElement(event.currentTarget), 1);    
+    STORE.items.splice(getItemIndexFromElement(event.currentTarget), 1);    
     renderShoppingList();
   });
 }
@@ -76,8 +78,23 @@ function handleDeleteItemClicked() {
 function handleShoppingList() {
   renderShoppingList();
   handleNewItemSubmit();
+  handleSearchSubmit();
+  handleShowAll();
+  handleClickTitle();
   handleItemCheckClicked();
   handleDeleteItemClicked();
+}
+
+function handleSearchSubmit() {
+
+}
+
+function handleShowAll() {
+
+}
+
+function handleClickTitle() {
+  
 }
 
 $(handleShoppingList);
