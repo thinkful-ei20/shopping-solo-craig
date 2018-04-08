@@ -8,7 +8,7 @@ const STORE = {
     {name: 'bread', checked: false},
   ],
   displayChecked: true,
-  search: '*',
+  search: /^./gi,
   sortBy: 'alpha',
 };
 
@@ -33,11 +33,11 @@ function generateItemElement(item, itemIndex) {
     </li>`;
 }
 
-function generateShoppingItemsString(shoppingList) {
-  //const listItems = shoppingList.map((item, index) => generateItemElement(item, index));  
-  //return listItems.join('');
-  
-  const listItems = shoppingList.filter(item => item.checked === STORE.displayChecked || STORE.displayChecked === true).map((item, index) => generateItemElement(item, index));
+function generateShoppingItemsString(shoppingList) {  
+  const listItems = shoppingList.
+    filter(item => item.checked === STORE.displayChecked || STORE.displayChecked === true).
+    filter(item => (item.name.match(STORE.search))).
+    map((item, index) => generateItemElement(item, index));
   return listItems.join('');
 }
 
@@ -88,7 +88,9 @@ function handleDeleteItemClicked() {
 
 function handleSearchSubmit() {
   $('#js-shopping-list-form').on('click', 'button', event => {
-    console.log('search');
+    const searchTerm = '^' + $('.js-shopping-list-entry').val();
+    let newSearch = new RegExp(searchTerm, 'gi');
+    STORE.search = newSearch;
     renderShoppingList();
   });
 }
