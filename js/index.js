@@ -80,6 +80,7 @@ function searchList(list) {
 function renderShoppingList() {
   const shoppingListItemsString = generateShoppingItemsString(STORE.items);
   $('.js-shopping-list').html(shoppingListItemsString);
+  $('.js-shopping-list-entry').val('');
   $('.js-shopping-list-entry').focus();
 }
 
@@ -90,11 +91,18 @@ function addItemToShoppingList(itemName) {
 function handleNewItemSubmit() {
   $('#js-shopping-list-form').submit(function(event) {
     event.preventDefault();
-    const newItemName = $('.js-shopping-list-entry').val();
-    $('.js-shopping-list-entry').val('');
-    addItemToShoppingList(newItemName);
-    renderShoppingList();
+    createNewItem();
   });
+}
+
+function createNewItem() {
+  const newItemName = $('.js-shopping-list-entry').val();
+  if (newItemName !== '') {
+    addItemToShoppingList(newItemName);
+  } else {
+    STORE.search = /./gi;
+  }
+  renderShoppingList();
 }
 
 function toggleCheckedForListItem(itemIndex) {
@@ -125,7 +133,9 @@ function handleDeleteItemClicked() {
 
 function handleSearchSubmit() {
   $('#js-shopping-list-form').on('click', '.shopping-list-search', event => {
-    STORE.search = new RegExp($('.js-shopping-list-entry').val(), 'gi');
+    const newSearch = $('.js-shopping-list-entry').val();
+    const newExpression = '>' + newSearch + '\\w*</span>';
+    STORE.search = new RegExp(newExpression, 'gi');
     renderShoppingList();
   });
 }
