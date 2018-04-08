@@ -88,9 +88,7 @@ function handleDeleteItemClicked() {
 
 function handleSearchSubmit() {
   $('#js-shopping-list-form').on('click', '.shopping-list-search', event => {
-    event.preventDefault();
-    const searchTerm = $('.js-shopping-list-entry').val();
-    STORE.search = new RegExp(searchTerm, 'gi');
+    STORE.search = new RegExp($('.js-shopping-list-entry').val(), 'gi');
     renderShoppingList();
   });
 }
