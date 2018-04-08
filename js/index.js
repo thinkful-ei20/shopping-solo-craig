@@ -63,6 +63,7 @@ function generateShoppingItemsString(shoppingList) {
   return searchedItems.join('');
 }
 
+// Search the generated html (rather than shoppingList) keeps index intact
 function searchList(list) {
   return list.filter(item => {
     if (STORE.displayChecked === false) {
