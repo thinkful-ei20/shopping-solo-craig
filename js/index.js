@@ -12,6 +12,20 @@ const STORE = {
   sortBy: 'alpha',
 };
 
+function addItemToShoppingList(itemName) {
+  STORE.items.push({name: itemName, checked: false});
+}
+
+function createNewItem() {
+  const newItemName = $('.js-shopping-list-entry').val();
+  if (newItemName !== '') {
+    addItemToShoppingList(newItemName);
+  } else {
+    STORE.search = /./gi;
+  }
+  renderShoppingList();
+}
+
 function generateItemElement(item, itemIndex) {
   return `
     <li class="js-item-index-element" data-item-index="${itemIndex}">
@@ -63,18 +77,11 @@ function generateShoppingItemsString(shoppingList) {
   return searchedItems.join('');
 }
 
-// Search the generated html (rather than shoppingList) keeps index intact
-function searchList(list) {
-  return list.filter(item => {
-    if (STORE.displayChecked === false) {
-      if (item.indexOf('shopping-item__checked') === -1) return item;
-    } else {
-      return item;
-    }
-  }).filter(item => {
-    //console.log(item);
-    if (item.match(STORE.search)) return item;
-  });
+function getItemIndexFromElement(item) {
+  const itemIndexString = $(item)
+    .closest('.js-item-index-element')
+    .attr('data-item-index');
+  return parseInt(itemIndexString, 10);
 }
 
 function renderShoppingList() {
@@ -84,8 +91,21 @@ function renderShoppingList() {
   $('.js-shopping-list-entry').focus();
 }
 
-function addItemToShoppingList(itemName) {
-  STORE.items.push({name: itemName, checked: false});
+// Search the generated html (rather than shoppingList) keeps index intact
+function searchList(list) {
+  return list.filter(item => {
+    if (STORE.displayChecked === false) {
+      if (item.indexOf('shopping-item__checked') === -1) return item;
+    } else {
+      return item;
+    }
+  }).filter(item => {
+    if (item.match(STORE.search)) return item;
+  });
+}
+
+function toggleCheckedForListItem(itemIndex) {
+  STORE.items[itemIndex].checked = !STORE.items[itemIndex].checked;
 }
 
 function handleNewItemSubmit() {
@@ -95,25 +115,17 @@ function handleNewItemSubmit() {
   });
 }
 
-function createNewItem() {
-  const newItemName = $('.js-shopping-list-entry').val();
-  if (newItemName !== '') {
-    addItemToShoppingList(newItemName);
-  } else {
-    STORE.search = /./gi;
-  }
-  renderShoppingList();
+function handleDeleteItemClicked() {  
+  $('.js-shopping-list').on('click', '.js-item-delete', event => {
+    STORE.items.splice(getItemIndexFromElement(event.currentTarget), 1);    
+    renderShoppingList();
+  });
 }
 
-function toggleCheckedForListItem(itemIndex) {
-  STORE.items[itemIndex].checked = !STORE.items[itemIndex].checked;
-}
-
-function getItemIndexFromElement(item) {
-  const itemIndexString = $(item)
-    .closest('.js-item-index-element')
-    .attr('data-item-index');
-  return parseInt(itemIndexString, 10);
+function handleEditItem() {
+  $('.js-shopping-list').on('click', '.shopping-item-edit', function(event) {
+    $(this).parent().siblings().attr('contenteditable', 'true');
+  });
 }
 
 function handleItemCheckClicked() {
@@ -124,10 +136,10 @@ function handleItemCheckClicked() {
   });
 }
 
-function handleDeleteItemClicked() {  
-  $('.js-shopping-list').on('click', '.js-item-delete', event => {
-    STORE.items.splice(getItemIndexFromElement(event.currentTarget), 1);    
-    renderShoppingList();
+function handleSaveItem() {
+  $('.js-shopping-list').on('click', '.shopping-item-save', function(event) {
+    $(this).parent().siblings().attr('contenteditable', null);    
+    STORE.items[$(this).closest('.js-item-index-element').attr('data-item-index')].name = $(this).parent().siblings().text();
   });
 }
 
@@ -142,19 +154,6 @@ function handleShowAll() {
   $('#js-shopping-list-form :checkbox').change(event => {
     STORE.displayChecked === true ? STORE.displayChecked = false : STORE.displayChecked = true;
     renderShoppingList();
-  });
-}
-
-function handleEditItem() {
-  $('.js-shopping-list').on('click', '.shopping-item-edit', function(event) {
-    $(this).parent().siblings().attr('contenteditable', 'true');
-  });
-}
-
-function handleSaveItem() {
-  $('.js-shopping-list').on('click', '.shopping-item-save', function(event) {
-    $(this).parent().siblings().attr('contenteditable', null);    
-    STORE.items[$(this).closest('.js-item-index-element').attr('data-item-index')].name = $(this).parent().siblings().text();
   });
 }
 
