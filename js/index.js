@@ -133,9 +133,7 @@ function handleDeleteItemClicked() {
 
 function handleSearchSubmit() {
   $('#js-shopping-list-form').on('click', '.shopping-list-search', event => {
-    const newSearch = $('.js-shopping-list-entry').val();
-    const newExpression = '>' + newSearch + '\\w*</span>';
-    STORE.search = new RegExp(newExpression, 'gi');
+    STORE.search = new RegExp('>\\w*' + $('.js-shopping-list-entry').val() + '\\w*</span>', 'gi');
     renderShoppingList();
   });
 }
