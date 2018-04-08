@@ -41,20 +41,39 @@ function generateItemElement(item, itemIndex) {
   return listItems.join('');
 }*/
 
-function generateShoppingItemsString(shoppingList) {  
-  const listItems = shoppingList.map((item, index) => generateItemElement(item, index));
-  const checkedItems = listItems.filter(item => {
+// function generateShoppingItemsString(shoppingList) {  
+//   const listItems = shoppingList.map((item, index) => generateItemElement(item, index));
+//   const checkedItems = listItems.filter(item => {
+//     if (STORE.displayChecked === false) {
+//       if (item.indexOf('shopping-item__checked') === -1) return item;
+//     } else {
+//       return item;
+//     }
+//   });
+//   const searchedItems = checkedItems.filter(item => {
+//     console.log(item);
+//     if (item.match(STORE.search)) return item;
+//   });
+//   return searchedItems.join('');
+// }
+
+function generateShoppingItemsString(shoppingList) {
+  const mappedItems = shoppingList.map((item, index) => generateItemElement(item, index));
+  const searchedItems = searchList(mappedItems);
+  return searchedItems.join('');
+}
+
+function searchList(list) {
+  return list.filter(item => {
     if (STORE.displayChecked === false) {
       if (item.indexOf('shopping-item__checked') === -1) return item;
     } else {
       return item;
     }
-  });
-  const searchedItems = checkedItems.filter(item => {
-    console.log(item);
+  }).filter(item => {
+    //console.log(item);
     if (item.match(STORE.search)) return item;
   });
-  return searchedItems.join('');
 }
 
 function renderShoppingList() {
