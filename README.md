@@ -1,1 +1,1 @@
-# craig-shopping-list
+# shopping-solo-craig
