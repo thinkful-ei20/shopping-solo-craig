@@ -7,7 +7,8 @@ const STORE = {
     {name: 'milk', checked: true},
     {name: 'bread', checked: false},
   ],
-  sortBy: 'alpha'
+  displayChecked: true,
+  search: '*',
 };
 
 function generateItemElement(item, itemIndex) {
@@ -20,6 +21,12 @@ function generateItemElement(item, itemIndex) {
         </button>
         <button class="shopping-item-delete js-item-delete">
             <span class="button-label">delete</span>
+        </button>
+        <button class="shopping-item-edit">
+            <span class="button-label">edit</span>
+        </button>
+        <button class="shopping-item-save">
+            <span class="button-label">save</span>
         </button>
       </div>
     </li>`;
@@ -75,26 +82,43 @@ function handleDeleteItemClicked() {
   });
 }
 
+function handleSearchSubmit() {
+  $('#js-shopping-list-form').on('click', 'button', event => {
+    console.log('search');
+    renderShoppingList();
+  });
+}
+
+function handleShowAll() {
+  $('#js-shopping-list-form :checkbox').change(event => {
+    console.log('show all');
+    renderShoppingList();
+  });
+}
+
+function handleEditItem() {
+  $('.js-shopping-list').on('click', '.shopping-item-edit', function(event) {
+    $('.shopping-item').attr('contenteditable', 'true');
+  });
+}
+
+function handleSaveItem() {
+  $('.js-shopping-list').on('click', '.shopping-item-save', function(event) {
+    $('.shopping-item').attr('contenteditable', null);    
+    STORE.items[$(this).closest('.js-item-index-element').attr('data-item-index')].name = $(this).parent().siblings().text();
+    renderShoppingList();
+  });
+}
+
 function handleShoppingList() {
   renderShoppingList();
   handleNewItemSubmit();
   handleSearchSubmit();
   handleShowAll();
-  handleClickTitle();
+  handleEditItem();
+  handleSaveItem();
   handleItemCheckClicked();
   handleDeleteItemClicked();
-}
-
-function handleSearchSubmit() {
-
-}
-
-function handleShowAll() {
-
-}
-
-function handleClickTitle() {
-  
 }
 
 $(handleShoppingList);
