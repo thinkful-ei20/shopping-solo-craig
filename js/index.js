@@ -8,7 +8,7 @@ const STORE = {
     {name: 'bread', checked: false},
   ],
   displayChecked: true,
-  search: /^./gi,
+  search: /./gi,
   sortBy: 'alpha',
 };
 
@@ -88,7 +88,7 @@ function handleDeleteItemClicked() {
 
 function handleSearchSubmit() {
   $('#js-shopping-list-form').on('click', 'button', event => {
-    const searchTerm = '^' + $('.js-shopping-list-entry').val();
+    const searchTerm = $('.js-shopping-list-entry').val();
     let newSearch = new RegExp(searchTerm, 'gi');
     STORE.search = newSearch;
     renderShoppingList();
@@ -104,15 +104,14 @@ function handleShowAll() {
 
 function handleEditItem() {
   $('.js-shopping-list').on('click', '.shopping-item-edit', function(event) {
-    $('.shopping-item').attr('contenteditable', 'true');
+    $(this).parent().siblings().attr('contenteditable', 'true');
   });
 }
 
 function handleSaveItem() {
   $('.js-shopping-list').on('click', '.shopping-item-save', function(event) {
-    $('.shopping-item').attr('contenteditable', null);    
+    $(this).parent().siblings().attr('contenteditable', null);    
     STORE.items[$(this).closest('.js-item-index-element').attr('data-item-index')].name = $(this).parent().siblings().text();
-    renderShoppingList();
   });
 }
 
