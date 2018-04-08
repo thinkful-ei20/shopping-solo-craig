@@ -33,25 +33,34 @@ function generateItemElement(item, itemIndex) {
     </li>`;
 }
 
-function generateShoppingItemsString(shoppingList) {  
+/*function generateShoppingItemsString(shoppingList) {  
   const listItems = shoppingList.
     filter(item => item.checked === STORE.displayChecked || STORE.displayChecked === true).
     filter(item => (item.name.match(STORE.search))).
     map((item, index) => generateItemElement(item, index));
   return listItems.join('');
-}
-
-/*function generateShoppingItemsString(shoppingList) {  
-  const listItems = shoppingList.map((item, index) => generateItemElement(item, index));
-  const checkedItems = listItems.filter(item => item.checked === STORE.displayChecked || STORE.displayChecked === true);
-  console.log(listItems);
-  //const searchedItems = checkedItems.filter(item => (item.name.match(STORE.search)));
-  return listItems.join('');
 }*/
+
+function generateShoppingItemsString(shoppingList) {  
+  const listItems = shoppingList.map((item, index) => generateItemElement(item, index));
+  const checkedItems = listItems.filter(item => {
+    if (STORE.displayChecked === false) {
+      if (item.indexOf('shopping-item__checked') === -1) return item;
+    } else {
+      return item;
+    }
+  });
+  const searchedItems = checkedItems.filter(item => {
+    console.log(item);
+    if (item.match(STORE.search)) return item;
+  });
+  return searchedItems.join('');
+}
 
 function renderShoppingList() {
   const shoppingListItemsString = generateShoppingItemsString(STORE.items);
   $('.js-shopping-list').html(shoppingListItemsString);
+  $('.js-shopping-list-entry').focus();
 }
 
 function addItemToShoppingList(itemName) {
@@ -76,7 +85,6 @@ function getItemIndexFromElement(item) {
   const itemIndexString = $(item)
     .closest('.js-item-index-element')
     .attr('data-item-index');
-  console.log(parseInt(itemIndexString, 10));
   return parseInt(itemIndexString, 10);
 }
 
