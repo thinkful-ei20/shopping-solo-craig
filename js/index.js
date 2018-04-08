@@ -41,6 +41,14 @@ function generateShoppingItemsString(shoppingList) {
   return listItems.join('');
 }
 
+/*function generateShoppingItemsString(shoppingList) {  
+  const listItems = shoppingList.map((item, index) => generateItemElement(item, index));
+  const checkedItems = listItems.filter(item => item.checked === STORE.displayChecked || STORE.displayChecked === true);
+  console.log(listItems);
+  //const searchedItems = checkedItems.filter(item => (item.name.match(STORE.search)));
+  return listItems.join('');
+}*/
+
 function renderShoppingList() {
   const shoppingListItemsString = generateShoppingItemsString(STORE.items);
   $('.js-shopping-list').html(shoppingListItemsString);
@@ -68,6 +76,7 @@ function getItemIndexFromElement(item) {
   const itemIndexString = $(item)
     .closest('.js-item-index-element')
     .attr('data-item-index');
+  console.log(parseInt(itemIndexString, 10));
   return parseInt(itemIndexString, 10);
 }
 

@@ -10,7 +10,8 @@ button, input[type="text"] {
   padding: 5px;
 }
 
-button:hover {
+button:hover,
+.checkbox {
   cursor: pointer;
 }
 
