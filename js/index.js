@@ -9,6 +9,7 @@ const STORE = {
   ],
   displayChecked: true,
   search: '*',
+  sortBy: 'alpha',
 };
 
 function generateItemElement(item, itemIndex) {
@@ -33,8 +34,11 @@ function generateItemElement(item, itemIndex) {
 }
 
 function generateShoppingItemsString(shoppingList) {
-  const items = shoppingList.map((item, index) => generateItemElement(item, index));  
-  return items.join('');
+  //const listItems = shoppingList.map((item, index) => generateItemElement(item, index));  
+  //return listItems.join('');
+  
+  const listItems = shoppingList.filter(item => item.checked === STORE.displayChecked || STORE.displayChecked === true).map((item, index) => generateItemElement(item, index));
+  return listItems.join('');
 }
 
 function renderShoppingList() {
@@ -91,7 +95,7 @@ function handleSearchSubmit() {
 
 function handleShowAll() {
   $('#js-shopping-list-form :checkbox').change(event => {
-    console.log('show all');
+    STORE.displayChecked === true ? STORE.displayChecked = false : STORE.displayChecked = true;
     renderShoppingList();
   });
 }
