@@ -125,6 +125,7 @@ function handleDeleteItemClicked() {
 function handleEditItem() {
   $('.js-shopping-list').on('click', '.shopping-item-edit', function(event) {
     $(this).parent().siblings().attr('contenteditable', 'true');
+    $(this).parent().siblings().addClass('shopping-item__editable');
   });
 }
 
@@ -138,7 +139,8 @@ function handleItemCheckClicked() {
 
 function handleSaveItem() {
   $('.js-shopping-list').on('click', '.shopping-item-save', function(event) {
-    $(this).parent().siblings().attr('contenteditable', null);    
+    $(this).parent().siblings().attr('contenteditable', null);
+    $(this).parent().siblings().removeClass('shopping-item__editable');
     STORE.items[$(this).closest('.js-item-index-element').attr('data-item-index')].name = $(this).parent().siblings().text();
   });
 }

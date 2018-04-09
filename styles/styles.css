@@ -50,3 +50,7 @@ button:hover,
 .shopping-item__checked {
   text-decoration: line-through;
 }
+
+.shopping-item__editable {
+  background-color: #F3F3F3;
+}
